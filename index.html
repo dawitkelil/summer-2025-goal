@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Summer 2025 Goals - Interactive</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- React CDNs -->
+  <script src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.development.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.development.js"></script>
+  <!-- Babel for JSX -->
+  <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.22.5/babel.min.js"></script>
+  <!-- Framer Motion for animations -->
+  <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #00f2fe;
+      --secondary: #4facfe;
+      --accent: #7367f0;
+      --dark: #0a0a0a;
+      --darker: #050505;
+    }
+
+    body {
+      font-family: 'Space Grotesk', sans-serif;
+      background-color: var(--dark);
+      color: #fff;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+    
+    .gradient-text {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .neon-card {
+      background: rgba(10, 10, 10, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 0 20px rgba(0, 242, 254, 0.1);
+      backdrop-filter: blur(10px);
+    }
+
+    .neon-card:hover {
+      box-shadow: 0 0 30px rgba(0, 242, 254, 0.2);
+    }
+
+    .card-hover {
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .card-hover:hover {
+      transform: translateY(-8px) scale(1.02);
+    }
+
+    .progress-ring {
+      transition: stroke-dashoffset 0.35s;
+      transform: rotate(-90deg);
+      transform-origin: 50% 50%;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0px); }
+    }
+
+    .float-animation {
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .mobile-menu {
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .mobile-menu.open {
+      transform: translateX(0);
+    }
+
+    .neon-button {
+      position: relative;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      border: none;
+      border-radius: 0.5rem;
+      padding: 1px;
+      transition: all 0.3s ease;
+    }
+
+    .neon-button:hover {
+      box-shadow: 0 0 20px rgba(0, 242, 254, 0.4);
+    }
+
+    .neon-button > div {
+      background: var(--darker);
+      border-radius: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .neon-button:hover > div {
+      background: rgba(5, 5, 5, 0.8);
+    }
+
+    .nav-link {
+      position: relative;
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -2px;
+      left: 0;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      transition: width 0.3s ease;
+    }
+
+    .nav-link:hover::after {
+      width: 100%;
+    }
+
+    .glow {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at center, rgba(0, 242, 254, 0.1) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    .stat-card {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 0.5rem;
+      padding: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .stat-card:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .timeline {
+      position: relative;
+      padding-left: 2rem;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--primary), var(--accent));
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 2rem;
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -2.5rem;
+      top: 0.5rem;
+      width: 1rem;
+      height: 1rem;
+      border-radius: 50%;
+      background: var(--primary);
+      box-shadow: 0 0 10px var(--primary);
+    }
+
+    .section-divider {
+      height: 2px;
+      background: linear-gradient(to right, transparent, var(--primary), transparent);
+      margin: 2rem 0;
+    }
+
+    .meal-plan {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .meal-card {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 0.5rem;
+      padding: 1.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .meal-card:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateY(-4px);
+    }
+
+    .workout-card {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 0.5rem;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .workout-card:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateX(8px);
+    }
+
+    .log-button {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 0.5rem;
+      padding: 0.5rem 1rem;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .log-button:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .log-button.completed {
+      background: rgba(0, 242, 254, 0.1);
+      border-color: var(--primary);
+    }
+
+    .progress-bar {
+      height: 4px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      transition: width 0.3s ease;
+    }
+
+    .activity-log {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 0.5rem;
+      padding: 1rem;
+      margin-top: 1rem;
+    }
+
+    .log-entry {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .log-entry:last-child {
+      border-bottom: none;
+    }
+
+    .streak-counter {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.25rem 0.75rem;
+      background: rgba(0, 242, 254, 0.1);
+      border-radius: 1rem;
+      font-size: 0.875rem;
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-[#0a0a0a] to-[#050505] min-h-screen">
+  <div id="root"></div>
+
+  <script type="text/babel">
+    // Navigation Component
+    function NavBar({ toggleTheme, isDark }) {
+      const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
+
+      return (
+        <nav className="fixed top-0 w-full neon-card z-50">
+          <div className="max-w-7xl mx-auto px-4 py-4">
+            <div className="flex justify-between items-center">
+              <h1 className="text-2xl font-bold gradient-text">Summer 2025 Goals</h1>
+              
+              {/* Mobile menu button */}
+              <button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="md:hidden p-2 rounded-lg hover:bg-white/10"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              </button>
+
+              {/* Desktop Navigation */}
+              <div className="hidden md:flex items-center space-x-8">
+                {['Home', 'Fitness', 'Printing', 'Reading', 'UMD', 'Fun', 'Expenses', 'Work', 'Meals', 'Workouts'].map((item) => (
+                  <a
+                    key={item}
+                    href={`#${item.toLowerCase()}`}
+                    className="nav-link text-gray-300 hover:text-white transition-colors duration-300"
+                  >
+                    {item}
+                  </a>
+                ))}
+                <button
+                  onClick={toggleTheme}
+                  className="neon-button"
+                >
+                  <div className="flex items-center space-x-2">
+                    <span>{isDark ? "Light Mode" : "Dark Mode"}</span>
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                    </svg>
+                  </div>
+                </button>
+              </div>
+            </div>
+
+            {/* Mobile Navigation */}
+            <div className={`mobile-menu md:hidden fixed top-16 left-0 w-full neon-card transform -translate-x-full ${isMobileMenuOpen ? 'open' : ''}`}>
+              <div className="flex flex-col space-y-4 p-4">
+                {['Home', 'Fitness', 'Printing', 'Reading', 'UMD', 'Fun', 'Expenses', 'Work', 'Meals', 'Workouts'].map((item) => (
+                  <a
+                    key={item}
+                    href={`#${item.toLowerCase()}`}
+                    className="nav-link text-gray-300 hover:text-white transition-colors duration-300 py-2"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    {item}
+                  </a>
+                ))}
+                <button
+                  onClick={toggleTheme}
+                  className="neon-button"
+                >
+                  <div className="flex items-center justify-center space-x-2">
+                    <span>{isDark ? "Light Mode" : "Dark Mode"}</span>
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                    </svg>
+                  </div>
+                </button>
+              </div>
+            </div>
+          </div>
+        </nav>
+      );
+    }
+
+    // Progress Ring Component
+    function ProgressRing({ progress, size = 120, strokeWidth = 8 }) {
+      const radius = (size - strokeWidth) / 2;
+      const circumference = radius * 2 * Math.PI;
+      const offset = circumference - (progress / 100) * circumference;
+
+      return (
+        <div className="relative inline-block">
+          <svg width={size} height={size}>
+            <circle
+              className="text-gray-800"
+              strokeWidth={strokeWidth}
+              stroke="currentColor"
+              fill="transparent"
+              r={radius}
+              cx={size / 2}
+              cy={size / 2}
+            />
+            <circle
+              className="progress-ring"
+              strokeWidth={strokeWidth}
+              strokeDasharray={circumference}
+              strokeDashoffset={offset}
+              strokeLinecap="round"
+              stroke="url(#gradient)"
+              fill="transparent"
+              r={radius}
+              cx={size / 2}
+              cy={size / 2}
+            />
+            <defs>
+              <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="var(--primary)" />
+                <stop offset="100%" stopColor="var(--accent)" />
+              </linearGradient>
+            </defs>
+          </svg>
+          <div className="absolute inset-0 flex items-center justify-center">
+            <span className="text-2xl font-bold gradient-text">{progress}%</span>
+          </div>
+        </div>
+      );
+    }
+
+    // Stats Grid Component
+    function StatsGrid({ stats }) {
+      return (
+        <div className="stats-grid mt-6">
+          {stats.map((stat, index) => (
+            <div key={index} className="stat-card">
+              <h4 className="text-sm text-gray-400">{stat.label}</h4>
+              <p className="text-2xl font-bold gradient-text">{stat.value}</p>
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    // Timeline Component
+    function Timeline({ items }) {
+      return (
+        <div className="timeline mt-6">
+          {items.map((item, index) => (
+            <div key={index} className="timeline-item">
+              <h4 className="text-lg font-semibold gradient-text">{item.title}</h4>
+              <p className="text-gray-400">{item.date}</p>
+              <p className="text-gray-300 mt-2">{item.description}</p>
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    // Hero Section Component
+    function Hero() {
+      return (
+        <section id="home" className="min-h-screen flex items-center justify-center relative overflow-hidden">
+          <div className="glow"></div>
+          <div className="text-center px-4 relative z-10">
+            <h1 className="text-6xl md:text-7xl font-bold mb-6 gradient-text float-animation">
+              My Summer 2025 Journey
+            </h1>
+            <p className="text-xl text-gray-400 mb-8 max-w-2xl mx-auto">
+              Tracking my goals: fitness, 3D printing, reading, UMD prep, and more!
+            </p>
+            <a
+              href="#fitness"
+              className="neon-button inline-block"
+            >
+              <div className="px-8 py-4">
+                See My Progress
+              </div>
+            </a>
+          </div>
+        </section>
+      );
+    }
+
+    // Activity Logger Component
+    function ActivityLogger({ type, onLog, completed, streak }) {
+      const [isLogging, setIsLogging] = React.useState(false);
+      const [notes, setNotes] = React.useState('');
+
+      const handleLog = () => {
+        onLog({ type, notes, timestamp: new Date() });
+        setNotes('');
+        setIsLogging(false);
+      };
+
+      return (
+        <div className="mt-4">
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center gap-2">
+              <span className="text-gray-300">Today's Progress</span>
+              {streak > 0 && (
+                <span className="streak-counter">
+                  🔥 {streak} day streak
+                </span>
+              )}
+            </div>
+            <button
+              onClick={() => setIsLogging(!isLogging)}
+              className={`log-button ${completed ? 'completed' : ''}`}
+            >
+              {completed ? '✓ Completed' : 'Log Activity'}
+            </button>
+          </div>
+          {isLogging && !completed && (
+            <div className="mt-2">
+              <textarea
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+                placeholder="Add notes (optional)"
+                className="w-full p-2 rounded bg-black/20 border border-gray-700 text-gray-300"
+                rows="2"
+              />
+              <button
+                onClick={handleLog}
+                className="neon-button mt-2"
+              >
+                <div className="px-4 py-2">Save Log</div>
+              </button>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // Activity Log Component
+    function ActivityLog({ logs }) {
+      return (
+        <div className="activity-log">
+          <h4 className="text-lg font-semibold gradient-text mb-2">Recent Activity</h4>
+          {logs.map((log, index) => (
+            <div key={index} className="log-entry">
+              <div>
+                <p className="text-gray-300">{log.type}</p>
+                {log.notes && <p className="text-sm text-gray-400">{log.notes}</p>}
+              </div>
+              <span className="text-sm text-gray-400">
+                {new Date(log.timestamp).toLocaleDateString()}
+              </span>
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    // Goal Card Component
+    function GoalCard({ id, title, description, progress, children, progressValue, progressTarget, stats, timeline }) {
+      const [isOpen, setIsOpen] = React.useState(false);
+      const [logs, setLogs] = React.useState([]);
+      const [streak, setStreak] = React.useState(0);
+      const [completed, setCompleted] = React.useState(false);
+
+      const handleLog = (logEntry) => {
+        setLogs(prev => [logEntry, ...prev].slice(0, 5));
+        setCompleted(true);
+        
+        // Update streak
+        const today = new Date().toDateString();
+        const lastLog = logs[0];
+        if (lastLog) {
+          const lastLogDate = new Date(lastLog.timestamp).toDateString();
+          const yesterday = new Date();
+          yesterday.setDate(yesterday.getDate() - 1);
+          if (lastLogDate === yesterday.toDateString()) {
+            setStreak(prev => prev + 1);
+          }
+        } else {
+          setStreak(1);
+        }
+      };
+
+      return (
+        <section id={id} className="min-h-screen flex items-center justify-center py-16 px-4">
+          <div className="max-w-4xl w-full mx-auto">
+            <div className="neon-card rounded-2xl overflow-hidden card-hover">
+              <div className="p-8">
+                <h2 className="text-4xl font-bold gradient-text mb-4">{title}</h2>
+                <p className="text-lg text-gray-400 mb-6">{description}</p>
+                
+                <div className="flex items-center justify-between mb-6">
+                  <div className="flex-1">
+                    <h3 className="text-2xl font-semibold mb-2 text-gray-300">Progress</h3>
+                    <p className="text-gray-400">{progress}</p>
+                    <div className="progress-bar mt-2">
+                      <div 
+                        className="progress-bar-fill" 
+                        style={{ width: `${Math.round((progressValue / progressTarget) * 100)}%` }}
+                      />
+                    </div>
+                  </div>
+                  {progressValue && progressTarget && (
+                    <ProgressRing progress={Math.round((progressValue / progressTarget) * 100)} />
+                  )}
+                </div>
+
+                <ActivityLogger
+                  type={title}
+                  onLog={handleLog}
+                  completed={completed}
+                  streak={streak}
+                />
+
+                {logs.length > 0 && <ActivityLog logs={logs} />}
+
+                {stats && <StatsGrid stats={stats} />}
+                {timeline && <Timeline items={timeline} />}
+
+                <button
+                  onClick={() => setIsOpen(!isOpen)}
+                  className="neon-button w-full mt-6"
+                >
+                  <div className="px-6 py-3 flex items-center justify-center space-x-2">
+                    <span>{isOpen ? "Hide Details" : "Show Details"}</span>
+                    <svg
+                      className={`w-5 h-5 transform transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </div>
+                </button>
+
+                {isOpen && (
+                  <div className="mt-6 p-6 neon-card rounded-lg">
+                    {children}
+                  </div>
+                )}
+              </div>
+            </div>
+            <div className="section-divider"></div>
+          </div>
+        </section>
+      );
+    }
+
+    // Main App Component
+    function App() {
+      const [isDark, setIsDark] = React.useState(true);
+
+      React.useEffect(() => {
+        document.body.className = isDark ? "dark" : "";
+      }, [isDark]);
+
+      const toggleTheme = () => {
+        setIsDark(!isDark);
+      };
+
+      return (
+        <div className="transition-colors duration-300">
+          <NavBar toggleTheme={toggleTheme} isDark={isDark} />
+          <Hero />
+          <GoalCard
+            id="fitness"
+            title="Fitness Goal"
+            description="Lose 24 pounds by September (2 pounds/week) through cardio workouts and a 2,400-calorie diet."
+            progress="Current Weight: 264 lbs (Started June 2). On track to hit 240 lbs by UMD start!"
+            progressValue={5}
+            progressTarget={100}
+            stats={[
+              { label: "Current Weight", value: "264 lbs" },
+              { label: "Target Weight", value: "240 lbs" },
+              { label: "Weekly Goal", value: "2 lbs" },
+              { label: "Calories/Day", value: "2,400" }
+            ]}
+            timeline={[
+              {
+                title: "Start Date",
+                date: "June 2, 2025",
+                description: "Initial weight: 264 lbs"
+              },
+              {
+                title: "Mid-Point Check",
+                date: "July 15, 2025",
+                description: "Target: 252 lbs"
+              },
+              {
+                title: "Goal Date",
+                date: "September 3, 2025",
+                description: "Target: 240 lbs"
+              }
+            ]}
+          >
+            <h4 className="text-xl font-semibold mb-4 gradient-text">Detailed Plan</h4>
+            <div className="space-y-4">
+              <p className="text-gray-300">Workouts: 5 days/week (treadmill, bike, elliptical), burning ~2,320 calories/week.</p>
+              <p className="text-gray-300">Diet: ~2,400 calories/day, high protein (~180g), moderate carbs (~250g), healthy fats (~80g).</p>
+              <p className="text-gray-300">Tracking: Weigh every Monday, 8 AM. Goal: 240 lbs by September 3.</p>
+            </div>
+          </GoalCard>
+
+          <GoalCard
+            id="printing"
+            title="3D Printing Project"
+            description="Build a drone frame using my Creality K1 SE to showcase at UMD."
+            progress="Started June 3. Working 3 days/week (1 hr/day). Aiming to finish by August 15."
+            stats={[
+              { label: "Days/Week", value: "3" },
+              { label: "Hours/Day", value: "1" },
+              { label: "Filament Budget", value: "$60" }
+            ]}
+            timeline={[
+              { title: "Start Date", date: "June 3, 2025", description: "Picked FPV Drone Frame design from Thingiverse." },
+              { title: "Test Printing", date: "June 15, 2025", description: "Test-printing motor mounts." },
+              { title: "Finish Goal", date: "August 15, 2025", description: "Complete drone frame." }
+            ]}
+          >
+            <h4 className="text-xl font-semibold mb-4 gradient-text">Details</h4>
+            <div className="space-y-4">
+              <p className="text-gray-300">Design: FPV Drone Frame (5-inch quadcopter) from Thingiverse.</p>
+              <p className="text-gray-300">Schedule: Monday, Wednesday, Friday, 7–8 PM.</p>
+              <p className="text-gray-300">Budget: $60 for filament (2 rolls). Test-printing motor mounts now.</p>
+            </div>
+          </GoalCard>
+
+          <GoalCard
+            id="reading"
+            title="Reading Goal"
+            description="Read 3 books by September: The Hunt for Red October, The Intelligent Investor, and A Brief History of Time."
+            progress="Reading 30 min/day, 5 days/week. Started June 3. Plan to finish by August 31."
+            stats={[
+              { label: "Books", value: "3" },
+              { label: "Reading Time", value: "30 min/day" },
+              { label: "Days/Week", value: "5" }
+            ]}
+            timeline={[
+              { title: "Start Date", date: "June 3, 2025", description: "Began The Hunt for Red October." },
+              { title: "Second Book", date: "July 1, 2025", description: "Start The Intelligent Investor." },
+              { title: "Finish Goal", date: "August 31, 2025", description: "Complete all 3 books." }
+            ]}
+          >
+            <h4 className="text-xl font-semibold mb-4 gradient-text">Details</h4>
+            <div className="space-y-4">
+              <p className="text-gray-300">Schedule: Monday–Friday, 9–9:30 PM.</p>
+              <p className="text-gray-300">Books: 1 fiction (Tom Clancy), 1 finance (Benjamin Graham), 1 science (Stephen Hawking).</p>
+              <p className="text-gray-300">Bonus: Discussing with girlfriend to make hangouts more engaging.</p>
+            </div>
+          </GoalCard>
+
+          <GoalCard
+            id="umd"
+            title="UMD Prep"
+            description="Get ready for Information Science program starting September 3 at UMD."
+            progress="Emailed advisor on June 3, call scheduled for June 25. Budgeted $400 for supplies."
+            stats={[
+              { label: "Advisor Call", value: "June 25" },
+              { label: "Courses", value: "4–5" },
+              { label: "Budget", value: "$400" }
+            ]}
+            timeline={[
+              { title: "Email Advisor", date: "June 3, 2025", description: "Scheduled call for June 25." },
+              { title: "Advisor Call", date: "June 25, 2025", description: "Plan fall courses." },
+              { title: "Buy Supplies", date: "August 10, 2025", description: "Books, parking pass, etc." }
+            ]}
+          >
+            <h4 className="text-xl font-semibold mb-4 gradient-text">Details</h4>
+            <div className="space-y-4">
+              <p className="text-gray-300">Advisor Call: June 25, 10 AM. Plan 4–5 courses (~15 credits) for fall.</p>
+              <p className="text-gray-300">Supplies (mid-August): Books ($200), parking pass ($100), notebooks ($50), software ($50).</p>
+              <p className="text-gray-300">Goal: Be enrolled and ready by September 3.</p>
+            </div>
+          </GoalCard>
+
+          <GoalCard
+            id="fun"
+            title="Fun & Social Activities"
+            description="Make summer memorable with hiking and new date spots with my girlfriend."
+            progress="Planned Shenandoah hike (July 15, $30) and 3 new dates (National Mall, Rock Creek Park, Silver Spring Market, $15)."
+            stats={[
+              { label: "Hiking Trip", value: "1" },
+              { label: "New Dates", value: "3" },
+              { label: "Budget", value: "$100" }
+            ]}
+            timeline={[
+              { title: "National Mall Date", date: "July 1, 2025", description: "$10 scooters, 2–4 PM." },
+              { title: "Shenandoah Hike", date: "July 15, 2025", description: "$20 pass, $10 gas, 8 AM–5 PM." },
+              { title: "Silver Spring Market", date: "August 5, 2025", description: "$5 snack, 2–4 PM." }
+            ]}
+          >
+            <h4 className="text-xl font-semibold mb-4 gradient-text">Details</h4>
+            <div className="space-y-4">
+              <p className="text-gray-300">Hiking: Shenandoah National Park, July 15, 8 AM–5 PM, $20 pass, $10 gas.</p>
+              <p className="text-gray-300">Dates: National Mall (July 1, $10 scooters), Rock Creek Park (July 22, free), Silver Spring Market (August 5, $5).</p>
+              <p className="text-gray-300">Budget: $100 total for fun activities.</p>
+            </div>
+          </GoalCard>
+
+          <GoalCard
+            id="expenses"
+            title="Monthly Expenses"
+            description="Total: $227.53/month for bare-bones costs (June–August: $682.59)."
+            progress="Covered by 2 shifts/week ($480/month). Surplus: $252.47/month."
+            stats={[
+              { label: "Total Cost", value: "$682.59" },
+              { label: "Monthly Cost", value: "$227.53" },
+              { label: "Surplus", value: "$252.47/mo" }
+            ]}
+          >
+            <h4 className="text-xl font-semibold mb-4 gradient-text">Breakdown</h4>
+            <ul className="list-disc list-inside text-gray-300 space-y-2">
+              <li>HSV Meds: $39/month (started June 3)</li>
+              <li>Minoxidil: $16/month (started June 3)</li>
+              <li>Gym: $24.99/month (starts June 17)</li>
+              <li>ChatGPT Plus: $21/month (starts June 16)</li>
+              <li>Regal Unlimited: $26.54/month (starts June 12)</li>
+              <li>SuperGrok: $30/month (starts June 21)</li>
+              <li>Gas: $70/month (ongoing)</li>
+            </ul>
+          </GoalCard>
+
+          <GoalCard
+            id="work"
+            title="Work Schedule"
+            description="2 shifts/week (Uber/DoorDash) to earn $480/month, covering expenses."
+            progress="Surplus: $252.47/month ($757.41 for summer). Allocated $400 for UMD, $60 for filament, $100 for fun."
+            stats={[
+              { label: "Shifts/Week", value: "2" },
+              { label: "Earnings", value: "$480/mo" },
+              { label: "Surplus", value: "$757.41" }
+            ]}
+            timeline={[
+              { title: "Tuesday Shift", date: "Weekly", description: "Uber, 5–9 PM, $60." },
+              { title: "Thursday Shift", date: "Weekly", description: "DoorDash, 5–9 PM, $60." }
+            ]}
+          >
+            <h4 className="text-xl font-semibold mb-4 gradient-text">Weekly Schedule</h4>
+            <ul className="list-disc list-inside text-gray-300 space-y-2">
+              <li>Tuesday: Uber, 5–9 PM ($60)</li>
+              <li>Thursday: DoorDash, 5–9 PM ($60)</li>
+              <li>Other Days: Off for gym, hangouts, movies</li>
+            </ul>
+          </GoalCard>
+
+          <GoalCard
+            id="meals"
+            title="Meal Plan (5 Days)"
+            description="Diet to lose 2 pounds/week (~2,400 calories/day, high protein)."
+            progress="Monday–Friday plan, three meals + two snacks daily."
+            stats={[
+              { label: "Calories/Day", value: "2,400" },
+              { label: "Protein", value: "~180g" },
+              { label: "Carbs", value: "~250g" }
+            ]}
+          >
+            <h4 className="text-xl font-semibold mb-4 gradient-text">Meal Plan (Monday–Friday)</h4>
+            <div className="meal-plan">
+              {[
+                {
+                  day: "Monday",
+                  meals: [
+                    "Breakfast: 4 eggs, ¾ cup oats, 2 tbsp almond butter, 1 banana (709 cal)",
+                    "Snack: 2/3 cup Greek yogurt, 1 apple (223 cal)",
+                    "Lunch: 8 oz chicken, 1.5 cups rice, greens, tomatoes, 2 tsp olive oil (792 cal)",
+                    "Snack: 4 oz tuna, 2 slices bread, lettuce (280 cal)",
+                    "Dinner: 6 oz salmon, 1 sweet potato, broccoli, 2 tsp olive oil (714 cal)"
+                  ]
+                },
+                {
+                  day: "Tuesday",
+                  meals: [
+                    "Breakfast: 1 cup Greek yogurt, 1 banana, 2 slices bread (487 cal)",
+                    "Snack: 1 cup melon, 1 tbsp almond butter (153 cal)",
+                    "Lunch: 8 oz tilapia, 1.5 cups rice, mixed veggies, 2 tsp olive oil (746 cal)",
+                    "Snack: 2 slices bread, 2 tbsp almond butter (340 cal)",
+                    "Dinner: 1.5 cups beef, peppers, spinach, 1 cup rice, 1 tsp soy sauce (618 cal)"
+                  ]
+                },
+                {
+                  day: "Wednesday",
+                  meals: [
+                    "Breakfast: 4 eggs, 2 slices bread, lettuce, 1 tbsp almond butter (492 cal)",
+                    "Snack: 1 apple, 2/3 cup Greek yogurt (223 cal)",
+                    "Lunch: 4 oz tuna, greens, cucumber, mustard, 2 cups rice (604 cal)",
+                    "Snack: 1 cup Greek yogurt, 1 banana (265 cal)",
+                    "Dinner: 8 oz chicken, broccoli, 1 sweet potato, 2 tsp olive oil (684 cal)"
+                  ]
+                },
+                {
+                  day: "Thursday",
+                  meals: [
+                    "Breakfast: ¾ cup oats, 1 cup Greek yogurt, 1 apple (532 cal)",
+                    "Snack: 1 cup melon, 1 slice bread (126 cal)",
+                    "Lunch: 8 oz salmon, 2 cups spinach, tomatoes, 2 tsp olive oil (550 cal)",
+                    "Snack: 4 oz tuna, 2 slices bread (272 cal)",
+                    "Dinner: 1.5 cups beef, 1.5 cups rice, mixed veggies (738 cal)"
+                  ]
+                },
+                {
+                  day: "Friday",
+                  meals: [
+                    "Breakfast: 4 eggs, 2 slices bread, lettuce, 1 tbsp almond butter (506 cal)",
+                    "Snack: 1 apple, 2/3 cup Greek yogurt (223 cal)",
+                    "Lunch: 8 oz chicken, 1.5 cups rice, broccoli (672 cal)",
+                    "Snack: 2 slices bread, 2 tbsp almond butter (340 cal)",
+                    "Dinner: 8 oz tilapia, 1 sweet potato, greens, 2 tsp olive oil (577 cal)"
+                  ]
+                }
+              ].map((day, index) => (
+                <div key={index} className="meal-card">
+                  <h5 className="text-lg font-semibold gradient-text mb-4">{day.day}</h5>
+                  <ul className="space-y-2">
+                    {day.meals.map((meal, mealIndex) => (
+                      <li key={mealIndex} className="text-gray-300">{meal}</li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </GoalCard>
+
+          <GoalCard
+            id="workouts"
+            title="Workout Plan (5 Days)"
+            description="Cardio plan to burn ~2,320 calories/week, supporting 2 pounds/week loss."
+            progress="Monday, Tuesday, Wednesday, Friday, Saturday at Planet Fitness."
+            stats={[
+              { label: "Days/Week", value: "5" },
+              { label: "Calories Burned", value: "~2,320/wk" },
+              { label: "Session Length", value: "50–55 min" }
+            ]}
+          >
+            <h4 className="text-xl font-semibold mb-4 gradient-text">Workout Schedule</h4>
+            <div className="space-y-4">
+              {[
+                {
+                  day: "Monday: Treadmill",
+                  details: "50 min, ~440 cal: Jog at 5 mph for 40 min (heart rate 130–150 bpm)."
+                },
+                {
+                  day: "Tuesday: Bike",
+                  details: "50 min, ~440 cal: Cycle at 70–80 RPM, moderate resistance for 40 min."
+                },
+                {
+                  day: "Wednesday: Elliptical",
+                  details: "50 min, ~495 cal: Moderate pace, resistance 5–7 for 40 min."
+                },
+                {
+                  day: "Friday: Treadmill",
+                  details: "55 min, ~470 cal: Jog at 4.5 mph for 45 min."
+                },
+                {
+                  day: "Saturday: Bike + Elliptical",
+                  details: "55 min, ~475 cal: 25 min bike, 20 min elliptical, moderate intensity."
+                }
+              ].map((workout, index) => (
+                <div key={index} className="workout-card">
+                  <h5 className="text-lg font-semibold gradient-text mb-2">{workout.day}</h5>
+                  <p className="text-gray-300">{workout.details}</p>
+                </div>
+              ))}
+            </div>
+          </GoalCard>
+        </div>
+      );
+    }
+
+    // Render the App
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html> 
